@@ -1,0 +1,116 @@
+name: semo-openclaw
+
+services:
+  semo-openclaw:
+    image: ghcr.io/openclaw/openclaw:2026.3.2
+    container_name: semo-openclaw
+    hostname: semo-openclaw
+    init: true
+    restart: unless-stopped
+    network_mode: bridge
+
+    # NOTE:
+    # 첫 설치에서 config가 없으면 gateway가 바로 죽을 수 있어서
+    # --allow-unconfigured를 임시로 넣음.
+    # 온보딩 완료 후에는 제거해도 됨.
+    command:
+      - node
+      - dist/index.js
+      - gateway
+      - --bind
+      - lan
+      - --port
+      - "18789"
+      - --allow-unconfigured
+
+    environment:
+      HOME: /home/node
+      TERM: xterm-256color
+      OPENCLAW_GATEWAY_TOKEN: "${OPENCLAW_GATEWAY_TOKEN}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      CLAUDE_AI_SESSION_KEY: "${CLAUDE_AI_SESSION_KEY:-}"
+      CLAUDE_WEB_SESSION_KEY: "${CLAUDE_WEB_SESSION_KEY:-}"
+      CLAUDE_WEB_COOKIE: "${CLAUDE_WEB_COOKIE:-}"
+
+    ports:
+      - "18789:18789"
+      # 18790은 내부용으로 두는 걸 권장 (외부 노출 X)
+
+    volumes:
+      - type: bind
+        source: /DATA/AppData/semo-openclaw/config
+        target: /home/node/.openclaw
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /DATA/AppData/semo-openclaw/workspace
+        target: /home/node/.openclaw/workspace
+        bind:
+          create_host_path: true
+
+    labels:
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/png/openclaw.png
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+
+  main: semo-openclaw
+  store_app_id: semo-openclaw
+  category: semo
+  developer: semo
+  author: semo
+  icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/png/openclaw.png
+  index: /
+  port_map: "18789"
+  scheme: http
+  is_uncontrolled: false
+
+  title:
+    en_us: semo-openclaw
+
+  tagline:
+    en_us: OpenClaw for semo OS
+
+  description:
+    en_us: Self-hosted OpenClaw package customized for semo OS.
+
+  tips:
+    before_install:
+      en_us: "Set OPENCLAW_GATEWAY_TOKEN first (ex: openssl rand -hex 32)."
+
+  envs:
+    - container: OPENCLAW_GATEWAY_TOKEN
+      description:
+        en_us: Gateway auth token for OpenClaw.
+
+    - container: OPENAI_API_KEY
+      description:
+        en_us: Optional OpenAI API key.
+
+    - container: CLAUDE_AI_SESSION_KEY
+      description:
+        en_us: Optional Claude AI session key.
+
+    - container: CLAUDE_WEB_SESSION_KEY
+      description:
+        en_us: Optional Claude web session key.
+
+    - container: CLAUDE_WEB_COOKIE
+      description:
+        en_us: Optional Claude web cookie.
+
+  ports:
+    - container: "18789"
+      description:
+        en_us: OpenClaw web port.
+
+  volumes:
+    - container: /home/node/.openclaw
+      description:
+        en_us: OpenClaw config directory.
+
+    - container: /home/node/.openclaw/workspace
+      description:
+        en_us: OpenClaw workspace directory.
