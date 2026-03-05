@@ -1,0 +1,26 @@
+name: semoai-openclaw-demo
+
+services:
+  semoai-openclaw-demo:
+    image: inwhan/semoai-openclaw-demo:v0.1.0
+    container_name: semoai-openclaw-demo
+    restart: unless-stopped
+    ports:
+      - target: 18789
+        published: "18789"
+        protocol: tcp
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+    - arm
+  main: semoai-openclaw-demo
+  category: Utilities
+  icon: https://raw.githubusercontent.com/nanang2017/CasaOS-AppStore/main/Apps/semo-openclaw-demo/icon.png
+  port_map: "18789"
+  scheme: http
+  index: /
+  title:
+    en_us: semoai-openclaw-demo
+  store_app_id: semoaiopenclawdemo
