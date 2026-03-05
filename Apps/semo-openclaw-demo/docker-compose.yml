@@ -1,0 +1,20 @@
+name: semo-openclaw-demo
+
+services:
+  semo-openclaw-demo:
+    image: inwhan/semo-openclaw-demo:v0.1.0
+    container_name: semo-openclaw-demo
+    restart: unless-stopped
+    ports:
+      - "5005:80"
+
+x-casaos:
+  architectures:
+    - amd64
+  main: semo-openclaw-demo
+  title:
+    en_us: semo-openclaw-demo
+  category: Utilities
+  icon: https://icon.casaos.io/main/all/webdav.png
+  index: /
+  port_map: "5005"
