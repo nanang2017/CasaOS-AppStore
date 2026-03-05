@@ -15,6 +15,6 @@ x-casaos:
   title:
     en_us: semo-openclaw-demo
   category: Utilities
-  icon: https://icon.casaos.io/main/all/webdav.png
+  icon: https://raw.githubusercontent.com/nanang2017/CasaOS-AppStore/main/Apps/semo-openclaw-demo/icon.png
   index: /
   port_map: "5005"
