@@ -9,6 +9,9 @@ services:
       - "5005:80"
 
 x-casaos:
+  architectures
+    - arm64
+    - arm
   main: semo-openclaw-demo
   title:
     en_us: semo-openclaw-demo
