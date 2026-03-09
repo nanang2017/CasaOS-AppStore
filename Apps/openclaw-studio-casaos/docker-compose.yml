@@ -1,0 +1,38 @@
+name: openclaw-studio-casaos
+
+services:
+  openclaw-studio:
+    image: ghcr.io/wekeepgrowing/openclaw-studio-casaos:studio-2026.3.9-amd64
+    container_name: openclaw-studio
+    platform: linux/amd64
+    restart: unless-stopped
+    ports:
+      - target: 3000
+        published: "3000"
+        protocol: tcp
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3000
+      NODE_ENV: development
+      STUDIO_ACCESS_TOKEN: change-me
+      OPENCLAW_STATE_DIR: /data
+      NEXT_PUBLIC_GATEWAY_URL: ws://localhost:18789
+    volumes:
+      - type: bind
+        source: /DATA/AppData/$AppID/data
+        target: /data
+
+x-casaos:
+  architectures:
+    - amd64
+  main: openclaw-studio
+  category: Utilities
+  icon: https://raw.githubusercontent.com/nanang2017/CasaOS-AppStore/main/Apps/semo-openclaw-demo/icon.png
+  port_map: "3000"
+  scheme: http
+  index: /
+  title:
+    en_us: OpenClaw Studio
+  tagline:
+    en_us: OpenClaw dashboard for agents, chat, and approvals
+  store_app_id: openclawstudiocasaos
